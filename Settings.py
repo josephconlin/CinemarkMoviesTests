@@ -3,10 +3,11 @@
 baseURL = 'http://www.cinemark.com'
 
 # browserType tells Selenium which browser we want the tests to be run with
-# Use names as described here: https://selenium.googlecode.com/svn/trunk/docs/api/py/webdriver/selenium.webdriver.common.desired_capabilities.html
-browserType = 'FIREFOX'
+# Use names as described here:
+# https://selenium.googlecode.com/svn/trunk/docs/api/py/webdriver/selenium.webdriver.common.desired_capabilities.html
+# browserType = 'FIREFOX'
 # browserType = 'INTERNETEXPLORER'
-# browserType = 'CHROME'
+browserType = 'CHROME'
 
 # seleniumHubURL tells the tests where to find the Selenium hub
 seleniumHubURL = 'http://127.0.0.1:4444/wd/hub'

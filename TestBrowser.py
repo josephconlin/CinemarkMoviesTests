@@ -12,6 +12,6 @@ class TestBrowser():
     def getbrowser(self):
         testdriver = webdriver.Remote(
             command_executor=Settings.seleniumHubURL,
-            desired_capabilities=getattr(DesiredCapabilities, Settings.browserType))
+            desired_capabilities=getattr(DesiredCapabilities, Settings.browserType).copy())
         testdriver.get(Settings.baseURL)
         return testdriver
