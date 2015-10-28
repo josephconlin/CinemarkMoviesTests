@@ -9,9 +9,10 @@ import Settings
 
 
 class TestBrowser():
-    def getbrowser(self):
+    def get_browser(self):
         testdriver = webdriver.Remote(
             command_executor=Settings.seleniumHubURL,
             desired_capabilities=getattr(DesiredCapabilities, Settings.browserType).copy())
+        testdriver.maximize_window()
         testdriver.get(Settings.baseURL)
         return testdriver
