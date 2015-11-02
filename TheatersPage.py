@@ -5,6 +5,7 @@ Page Object and tests for Cinemark.com theater search results page
 
 from TestBrowser import TestBrowser
 from HeaderPage import Header
+from TheaterDetailPage import TheaterDetail
 
 import unittest
 from selenium.common.exceptions import NoSuchElementException
@@ -14,14 +15,14 @@ class Theaters():
     # Class to define elements of the theater search results page
     def __init__(self, driver):
         self.driver = driver
-        # self._theaterListContainers = driver.find_elements_by_class_name("type")
+        self._theaterListContainer = driver.find_element_by_class_name("address-box")
         self.theatersList = []
-        for theater in driver.find_elements_by_class_name("type"):
+        for theater in self._theaterListContainer.find_elements_by_class_name("type"):
             self.theatersList.append(theater.find_element_by_tag_name("a").text)
 
     def click_theater(self, linkText):
         try:
-            self.driver.find_element_by_partial_link_text(linkText).click()
+            self._theaterListContainer.find_element_by_partial_link_text(linkText).click()
         except NoSuchElementException:
             raise
 
@@ -45,12 +46,13 @@ class TheatersTests(unittest.TestCase):
         self.assertRaises(NoSuchElementException, self.theaters.click_theater, "Non existent theater")
 
     def test_clickTheaterValidInputText(self):
-        theaterName = "Cinemark"
+        testTheaterName = "Cinemark"
         currentPage = self.driver.current_url
-        self.theaters.click_theater(theaterName)
+        self.theaters.click_theater(testTheaterName)
         newPage = self.driver.current_url
+        theaterName = TheaterDetail(self.driver).theaterName
         self.assertNotEqual(currentPage, newPage, "Selecting a theater did not navigate to a new page")
-        self.assertIn(theaterName.lower(), self.driver.find_element_by_tag_name("h1").text.lower(),
+        self.assertIn(testTheaterName.lower(), theaterName.lower(),
                       "Did not end up on theater detail page for selected theater")
 
 if __name__ == '__main__':

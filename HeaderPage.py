@@ -32,7 +32,7 @@ class Header():
         # Firefox doesn't detect the movie list as visible, IE and Chrome don't leave the movie display open
         # Set the style display on the movie list the same way the page does so that the link can be found and clicked
         self.driver.execute_script('arguments[0].setAttribute("style", "display: block;")',
-                              self.driver.find_element_by_class_name("drop"))
+                                   self.driver.find_element_by_class_name("drop"))
         self.driver.find_element_by_class_name("inner").find_elements_by_tag_name("a")[i].click()
         return i
 
@@ -63,7 +63,7 @@ class HeaderTests(unittest.TestCase):
         newPage = self.driver.current_url
         self.assertNotEqual(currentPage, newPage, "Selecting a movie did not navigate to a new page")
         self.assertEqual(self.header.movieList[i].lower(), self.driver.find_element_by_tag_name("h1").text.lower(),
-                      "Did not end up on movie listing page for selected movie")
+                         "Did not end up on movie listing page for selected movie")
 
     def test_search(self):
         testText = "ABC123"
