@@ -8,11 +8,12 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import Settings
 
 
-class TestBrowser():
-    def get_browser(self):
-        testdriver = webdriver.Remote(
+class TestBrowser:
+    @staticmethod
+    def get_browser():
+        testDriver = webdriver.Remote(
             command_executor=Settings.seleniumHubURL,
             desired_capabilities=getattr(DesiredCapabilities, Settings.browserType).copy())
-        testdriver.maximize_window()
-        testdriver.get(Settings.baseURL)
-        return testdriver
+        testDriver.maximize_window()
+        testDriver.get(Settings.baseURL)
+        return testDriver

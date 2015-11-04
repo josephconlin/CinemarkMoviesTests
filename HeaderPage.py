@@ -1,15 +1,12 @@
 __author__ = 'Joseph Conlin'
 """
-Page Object and tests for Cinemark.com header items
+Page Object for Cinemark.com header items
 """
 
-from TestBrowser import TestBrowser
-
-import unittest
 from random import randint
 
 
-class Header():
+class Header:
     # Class to define elements of the header
     def __init__(self, driver):
         self.driver = driver
@@ -43,36 +40,3 @@ class Header():
     def do_search(self, searchString=''):
         self.input_search_string(searchString)
         self.searchSubmit.click()
-
-
-class HeaderTests(unittest.TestCase):
-    def setUp(self):
-        self.driver = TestBrowser().get_browser()
-        self.header = Header(self.driver)
-
-    def tearDown(self):
-        self.driver.quit()
-
-    def test_movie_list(self):
-        self.assertNotEqual(0, len(self.header.movieList), "Did not create movie list")
-        self.assertNotEqual(0, len(self.header.movieList[0]), "Did not get a valid list of movies")
-
-    def test_movie_selection(self):
-        currentPage = self.driver.current_url
-        i = self.header.select_random_movie()
-        newPage = self.driver.current_url
-        self.assertNotEqual(currentPage, newPage, "Selecting a movie did not navigate to a new page")
-        self.assertEqual(self.header.movieList[i].lower(), self.driver.find_element_by_tag_name("h1").text.lower(),
-                         "Did not end up on movie listing page for selected movie")
-
-    def test_search(self):
-        testText = "ABC123"
-        currentPage = self.driver.current_url
-        self.header.do_search(testText)
-        newPage = self.driver.current_url
-        self.assertNotEqual(currentPage, newPage, "Searching did not navigate to a new page")
-        self.assertIn(testText, newPage, "Search text not found in search URL string")
-
-if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(HeaderTests)
-    unittest.TextTestRunner(verbosity=2).run(suite)
