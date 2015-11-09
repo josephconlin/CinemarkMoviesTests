@@ -1,6 +1,6 @@
 __author__ = 'Joseph Conlin'
 """
-Page Object and tests for Cinemark.com theater detail page
+Page Object for Cinemark.com theater detail page
 """
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait

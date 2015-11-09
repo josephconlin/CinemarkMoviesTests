@@ -1,6 +1,6 @@
 __author__ = 'Joseph Conlin'
 """
-Page Object and tests for Cinemark.com theater search results page
+Page Object for Cinemark.com theater search results page
 """
 
 from selenium.common.exceptions import NoSuchElementException
