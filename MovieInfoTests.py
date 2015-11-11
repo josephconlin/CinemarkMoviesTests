@@ -6,14 +6,16 @@ from TestBrowser import TestBrowser
 from HeaderPage import Header
 from TheatersPage import Theaters
 import TheaterDetailPage
+import FileOutput
 
 import unittest
+import os
 from selenium.common.exceptions import NoSuchElementException
 
 # Setup some common test variables
 _headerSearchText = "Salt Lake City"
-# _headerSearchTextNoSpaces = "ABC123"
 _theaterLinkText = "Cinemark"
+_csvFileName = "CSVTest"+FileOutput.WriteCSV.defaultFileExtension
 
 
 class MovieInfoTests(unittest.TestCase):
@@ -31,7 +33,37 @@ class MovieInfoTests(unittest.TestCase):
         self.driver.quit()
 
     def test_log_csv(self):
-        pass
+        currentFileSize = 0
+        try:
+            currentFileSize = os.path.getsize(_csvFileName)
+        except os.error:
+            # Error is likely due to file not existing which means size 0 so do nothing
+            pass
+
+        # TODO: After TheaterDetailPage.TheaterCalendar has index based function, rewrite below in a loop
+        # Initial load of self.theater is today so no need to click, just write data
+        FileOutput.WriteCSV.write_movie_details(self.theater, _csvFileName)
+        self.theaterCalendar.click_today_plus_one()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteCSV.write_movie_details(newDay, _csvFileName)
+        self.theaterCalendar.click_today_plus_two()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteCSV.write_movie_details(newDay, _csvFileName)
+        self.theaterCalendar.click_today_plus_three()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteCSV.write_movie_details(newDay, _csvFileName)
+        self.theaterCalendar.click_today_plus_four()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteCSV.write_movie_details(newDay, _csvFileName)
+        self.theaterCalendar.click_today_plus_five()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteCSV.write_movie_details(newDay, _csvFileName)
+        self.theaterCalendar.click_today_plus_six()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteCSV.write_movie_details(newDay, _csvFileName)
+
+        newFileSize = os.path.getsize(_csvFileName)
+        self.assertLess(currentFileSize, newFileSize, "Did not write new data to csv output file")
 
 
 # class TheatersTests(unittest.TestCase):
