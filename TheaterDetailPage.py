@@ -2,10 +2,8 @@ __author__ = 'Joseph Conlin'
 """
 Page Object for Cinemark.com theater detail page
 """
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 
 
 class MovieDetail:
@@ -32,9 +30,8 @@ class TheaterDetail:
     # Class to define elements of the theater detail page
     def __init__(self, driver):
         self.driver = driver
-        # Sometimes need to wait for the page load to complete
-        self._theaterMoviesListContainer = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "movies-box")))
+        # NOTE: _theaterMoviesListContainer is duplicated in class TheaterCalendar
+        self._theaterMoviesListContainer = driver.find_element_by_class_name("movies-box")
 
         self.theaterName = driver.find_element_by_class_name("inner-holder").find_element_by_tag_name("h1").text
         self.theaterMoviesList = self.get_movies_list()
@@ -51,38 +48,46 @@ class TheaterCalendar:
     def __init__(self, driver):
         self.driver = driver
         self._theaterCalendarLinks = driver.find_element_by_class_name("week-item").find_elements_by_tag_name("a")
+        # NOTE: _theaterMoviesListContainer is duplicated in class TheaterDetail
+        self._theaterMoviesListContainer = driver.find_element_by_class_name("movies-box")
+        self._sleepTime = 0
+
+    def wait_for_page_reload(self):
+        # Sometimes need to wait for the page reload to complete
+        WebDriverWait(self.driver, 10).until(EC.staleness_of(self._theaterMoviesListContainer))
 
     """Using any of these click functions will cause a section of the TheaterDetail page to be changed.
        You will need new objects from this file to represent the new HTML page as the driver will have changed.
        Wait after the click so that the new page doesn't accidentally grab the old data elements
     """
+    # TODO: Write an index based function for clicking days that checks to only click indexes between 0 and 6 or 7
     def click_today(self):
         self._theaterCalendarLinks[0].click()
-        time.sleep(1)
+        self.wait_for_page_reload()
 
     def click_today_plus_one(self):
         self._theaterCalendarLinks[1].click()
-        time.sleep(1)
+        self.wait_for_page_reload()
 
     def click_today_plus_two(self):
         self._theaterCalendarLinks[2].click()
-        time.sleep(1)
+        self.wait_for_page_reload()
 
     def click_today_plus_three(self):
         self._theaterCalendarLinks[3].click()
-        time.sleep(1)
+        self.wait_for_page_reload()
 
     def click_today_plus_four(self):
         self._theaterCalendarLinks[4].click()
-        time.sleep(1)
+        self.wait_for_page_reload()
 
     def click_today_plus_five(self):
         self._theaterCalendarLinks[5].click()
-        time.sleep(1)
+        self.wait_for_page_reload()
 
     def click_today_plus_six(self):
         self._theaterCalendarLinks[6].click()
-        time.sleep(1)
+        self.wait_for_page_reload()
 
     def click_more(self):
         self._theaterCalendarLinks[7].click()
