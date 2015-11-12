@@ -11,3 +11,6 @@ browserType = 'FIREFOX'
 
 # seleniumHubURL tells the tests where to find the Selenium hub
 seleniumHubURL = 'http://127.0.0.1:4444/wd/hub'
+
+# seleniumWaitTime tells any explicit waits how long to wait before giving up
+seleniumWaitTime = 10
