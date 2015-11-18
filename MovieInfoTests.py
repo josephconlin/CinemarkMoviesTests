@@ -17,6 +17,7 @@ _headerSearchText = "Salt Lake City"
 _theaterLinkText = "Cinemark"
 _csvFileName = "CSVTest"+FileOutput.WriteCSV.defaultFileExtension
 _excelFileName = "ExcelTest"+FileOutput.WriteExcel.defaultFileExtension
+_jsonFileName = "JSONTest"+FileOutput.WriteJSON.defaultFileExtension
 
 
 class MovieInfoTests(unittest.TestCase):
@@ -99,13 +100,40 @@ class MovieInfoTests(unittest.TestCase):
         newFileSize = os.path.getsize(_excelFileName)
         self.assertLess(currentFileSize, newFileSize, "Did not write new data to Excel output file")
 
+    def test_log_json(self):
+        currentFileSize = 0
+        try:
+            currentFileSize = os.path.getsize(_jsonFileName)
+        except FileNotFoundError:
+            # Error is due to file not existing which means size 0 so do nothing
+            pass
+
+        # TODO: After TheaterDetailPage.TheaterCalendar has index based function, rewrite below in a loop
+        # Initial load of self.theater is today so no need to click, just write data.
+        FileOutput.WriteJSON.write_movie_details(self.theater, _jsonFileName)
+        self.theaterCalendar.click_today_plus_one()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteJSON.write_movie_details(newDay, _jsonFileName)
+        self.theaterCalendar.click_today_plus_two()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteJSON.write_movie_details(newDay, _jsonFileName)
+        self.theaterCalendar.click_today_plus_three()
+        TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteJSON.write_movie_details(newDay, _jsonFileName)
+        self.theaterCalendar.click_today_plus_four()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteJSON.write_movie_details(newDay, _jsonFileName)
+        self.theaterCalendar.click_today_plus_five()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteJSON.write_movie_details(newDay, _jsonFileName)
+        self.theaterCalendar.click_today_plus_six()
+        newDay = TheaterDetailPage.TheaterDetail(self.driver)
+        FileOutput.WriteJSON.write_movie_details(newDay, _jsonFileName)
+
+        newFileSize = os.path.getsize(_jsonFileName)
+        self.assertLess(currentFileSize, newFileSize, "Did not write new data to JSON output file")
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MovieInfoTests)
-    # testsToRun = [
-    #     MovieInfoTests,
-    #     # TheatersTests,
-    #     # TheaterDetailTests,
-    # ]
-    # suite = unittest.TestSuite([unittest.TestLoader().loadTestsFromTestCase(test) for test in testsToRun])
     unittest.TextTestRunner(verbosity=2).run(suite)

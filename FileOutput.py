@@ -8,6 +8,7 @@ import os
 import csv
 # import xlwt
 from openpyxl import Workbook, load_workbook
+import json
 
 # Setup common variables
 _defaultFileName = "MovieInfo"
@@ -105,3 +106,45 @@ class WriteExcel:
                     ws.append([theaterDetail.theaterName, movieDetail.movieName, movieDetail.movieImageURL, showTime])
 
         wb.save(fileName)
+
+
+class WriteJSON:
+    """Parse a given TheaterDetailPage.TheaterDetail object to write each show time on a single row as below:
+       <theaterName>, <movieName>, <movieImageURL>, <showTime>
+       Expect multiple rows per theater / movie combination
+    """
+    defaultFileExtension = ".txt"
+
+    @staticmethod
+    def write_movie_details(theaterDetail, fileName=_defaultFileName+defaultFileExtension):
+        # Create first part of JSON string with theater name information
+        info = '{"theaterInfo": { "name": "'+theaterDetail.theaterName+'",\n'
+        for movieDetail in theaterDetail.get_movies_list():
+            # Create second part of JSON string with movie name and URL information
+            info += '"movieInfo": { "name": "'+movieDetail.movieName
+            info += '",\n "src": "'+movieDetail.movieImageURL+'",\n'
+            # Create third part of JSON string with movie show times, then close third part
+            info += '"showTimeInfo": {'+json.dumps(movieDetail.get_movie_show_times())+'}\n'
+            # Close second part of JSON string
+            info += '},\n'
+
+        # Remove trailing comma and newline from second part of JSON string, then close first part of JSON string
+        info = info.rstrip(',\n')+'\n}}\n\n'
+
+        with open(fileName, 'a', newline='') as outFile:
+            outFile.write(info)
+
+    # @staticmethod
+    # def write_movie_details(theaterDetail, fileName=_defaultFileName+defaultFileExtension):
+    #     t_info = {"theaterInfo": ""}
+    #     t_info.update({"name": theaterDetail.theaterName})
+    #     jsonInfo = json.dumps(t_info, indent=4)
+    #
+    #     for movieDetail in theaterDetail.get_movies_list():
+    #         m_info = {"movieInfo": ""}
+    #         m_info.update({movieDetail.movieName: movieDetail.movieImageURL})
+    #         m_info.update({"showTimeInfo": movieDetail.get_movie_show_times()})
+    #         jsonInfo += json.dumps(m_info, indent=4)
+    #
+    #     with open(fileName, 'a', newline='') as outFile:
+    #         outFile.write(jsonInfo)
