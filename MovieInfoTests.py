@@ -10,7 +10,6 @@ import FileOutput
 
 import unittest
 import os
-from selenium.common.exceptions import NoSuchElementException
 
 # Setup some common test variables
 _headerSearchText = "Salt Lake City"
